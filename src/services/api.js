@@ -1,12 +1,13 @@
 import axios from "axios";
 
 const axiosAPI = axios.create({
-    baseURL: process.env.API_URL
+    // @ts-ignore
+    baseURL: import.meta.env.VITE_API_URL,
 });
 
 const apiRequest = (method, url, request) => {
     const headers = {
-        authorization: ""
+        "Content-Type": "application/json",
     };
     //using the axios instance to perform the request that received from each http method
     return axiosAPI({
@@ -45,3 +46,21 @@ const API ={
     patch
 };
 export default API;
+
+export const getSettings = async (guild_id) => {
+  const gdata = await get(`/api/guilds/${guild_id}/settings`);
+  const settings_data = await get("/static/settings.json");
+
+  let data = {};
+  for (const [k, v] of Object.entries(settings_data)) {
+    data[k] = {};
+    for (const [key, value] of Object.entries(v)) {
+      data[k][key] = {
+        value: gdata[k] && gdata[k][key] ? gdata[k][key] : value.default,
+        ...value
+      }
+    }
+  }
+  console.log(data);
+  return data;
+}
