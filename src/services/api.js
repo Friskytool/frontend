@@ -3,7 +3,7 @@ import axios from "axios";
 const axiosAPI = axios.create({
     // @ts-ignore
   baseURL: "/",
-  withCredentials: true, //ab
+  withCredentials: true,
 });
 
 const apiRequest = (method, url, request) => {
