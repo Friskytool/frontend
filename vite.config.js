@@ -7,5 +7,12 @@ export default defineConfig({
   plugins: [svelte()],
   css:{
     postcss
+  },
+  server: {
+    hmr: {
+      protocol: "ws",
+      host: "localhost"
+    },
+
   }
 })

@@ -2,6 +2,7 @@
     import { fly } from "svelte/transition";
     import { createEventDispatcher } from "svelte";
     import Tags from "svelte-tags-input";
+    import Switch from "./Switch.svelte";
     const dispatch = createEventDispatcher();
 
     function clickOutside(node, { enabled: initialEnabled, cb }) {
@@ -40,10 +41,28 @@
     export let setting = {};
     export let roles = [];
 
-    let value = setting.value;
+    let value = insert(setting.value);
     $: update(value);
 
+    function insert(value) {
+        if (Array.isArray(value)) {
+            return value
+                .map((v) => roles.find((r) => r.id === v.id))
+                .filter((v) => v !== undefined);
+        }
+
+        return value;
+    }
+
     function update(value) {
+        // if value is list map to every id element in list
+        console.log(value);
+        if (Array.isArray(value)) {
+            console.log(value);
+            value = value.map((v) => {
+                return { id: v.id };
+            });
+        }
         dispatch("update", value);
     }
 
@@ -88,12 +107,7 @@
                 {:else if setting.type == "boolean"}
                     <div class="flex justify-center">
                         <div class="form-check form-switch">
-                            <input
-                                class="form-check-input appearance-none w-16 ml-10 rounded-full float-left h-5 align-top bg-white bg-no-repeat bg-contain bg-gray-300 focus:outline-none cursor-pointer shadow-sm"
-                                type="checkbox"
-                                role="switch"
-                                bind:checked={value}
-                            />
+                            <Switch bind:checked={value} />
                         </div>
                     </div>
                 {:else if setting.type == "select"}
@@ -125,7 +139,9 @@
                                 class="appearance-none block w-full bg-grey-700 text-white border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:ring-1 focus:ring-orange focus:border-orange"
                                 on:keydown={({ key, target }) => {
                                     if (key == "Enter") {
+                                        // @ts-ignore
                                         value.push(target.value);
+                                        // @ts-ignore
                                         target.value = "";
                                         value = value; // force update
                                     }

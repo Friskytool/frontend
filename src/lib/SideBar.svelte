@@ -1,10 +1,13 @@
 <script>
-    import { location } from "svelte-spa-router";
+    import { location, push } from "svelte-spa-router";
     import { fly } from "svelte/transition";
     import { link } from "svelte-spa-router";
     import api from "../services/api.js";
     let plugins_visible = false;
 
+    setTimeout(() => {
+        plugins_visible = true;
+    }, 1500);
     let guild_id = $location.split("/")[2];
     location.subscribe((l) => {
         guild_id = l.split("/")[2];
@@ -119,10 +122,8 @@
                 <button
                     type="button"
                     class="flex items-center w-full p-2 text-base font-normal text-grey transition duration-75 rounded-lg group hover:bg-grey-700 dark:text-white dark:hover:bg-grey-700"
-                    aria-controls="dropdown-example"
-                    data-collapse-toggle="dropdown-example"
                     on:click={() => {
-                        plugins_visible = !plugins_visible;
+                        push(`/app/${guild_id}/`);
                     }}
                 >
                     <svg

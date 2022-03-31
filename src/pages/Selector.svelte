@@ -14,18 +14,21 @@
                 guilds_cache.update((_) => response);
                 guilds = response;
             })
+
             .catch((e) => {
-                console.log(e);
-                let w = window.open(
-                    `${import.meta.env.VITE_API_URL}/api/oauth/login`,
-                    "_blank",
-                    "toolbar=no,width=400,height=575"
-                );
-                setInterval(() => {
-                    if (w && w.closed) {
-                        window.location.reload();
-                    }
-                }, 1000);
+                window.location.href =
+                    (import.meta.env.VITE_API_URL || "") + "/api/oauth/login";
+                // console.log(e);
+                // let w = window.open(
+                //     `${import.meta.env.VITE_API_URL}/api/oauth/login`,
+                //     "_blank",
+                //     "toolbar=no,width=400,height=575"
+                // );
+                // setInterval(() => {
+                //     if (w && w.closed) {
+                //         window.location.reload();
+                //     }
+                // }, 1000);
             });
     });
 

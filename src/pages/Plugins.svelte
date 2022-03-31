@@ -1,20 +1,60 @@
 <script>
     import api from "../services/api.js";
-    import { link, push } from "svelte-spa-router";
+    import Switch from "../lib/Switch.svelte";
+    import { push } from "svelte-spa-router";
     import { onMount } from "svelte";
     import { fly } from "svelte/transition";
     import { guilds } from "../services/stores.js";
+
     export let params = {};
-    let plugin_data = api.get("/static/plugins.json");
+    console.log("A");
+    let update_modal = false;
+    let plugin_data;
+    let plugins, plugins_copy;
+    $: update_modal = JSON.stringify(plugins) !== JSON.stringify(plugins_copy);
+
+    const savePlugins = async () => {
+        let data = [];
+        for (const [k, v] of Object.entries(plugins)) {
+            if (v) {
+                data.push(k);
+            }
+        }
+
+        await api.post(`/api/guilds/${params.id}/plugins`, data);
+
+        plugins_copy = JSON.parse(JSON.stringify(plugins));
+    };
     let guild = $guilds.find((g) => g.id == params.id) || {};
     $: console.log(guild);
     onMount(async () => {
         if (!guild["id"]) {
             if ($guilds.length == 0) {
-                push("/app");
+                await api
+                    .get("/api/user/guilds")
+                    .then((response) => {
+                        guilds.update((_) => response);
+                    })
+
+                    .catch((e) => {
+                        window.location.href =
+                            (import.meta.env.VITE_API_URL || "") +
+                            "/api/oauth/login";
+                    });
+
+                guild = await api.get(`/api/guilds/${params.id}`);
             }
-            guild = await api.get(`/api/guilds/${params.id}`);
         }
+        plugin_data = await api.get("/static/plugins.json");
+        console.log("data", plugin_data);
+        let enabled_plugins = await api.get(`/api/guilds/${params.id}/plugins`);
+        let eplugins = {};
+        for (const plugin of plugin_data) {
+            eplugins[plugin.key] = enabled_plugins.includes(plugin.key);
+        }
+
+        plugins = eplugins;
+        plugins_copy = JSON.parse(JSON.stringify(plugins));
     });
 </script>
 
@@ -35,24 +75,69 @@
             <div
                 class="rounded-lg grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 px-4 mx-auto py-4 text-2xl"
             >
-                {#await plugin_data then plugins}
-                    {#each plugins as plugin, i}
-                        <a
-                            class="shadow-lg shadow-black bg-black rounded-lg px-6 py-4 m-2 rounded-lg border-2 hover:border-white"
-                            use:link
+                {#if plugins}
+                    {#each plugin_data as plugin, i}
+                        <div
+                            class="shadow-lg shadow-black bg-black rounded-lg px-6 py-4 m-2 rounded-lg border-2 hover:border-white {plugins_copy[
+                                plugin.key
+                            ]
+                                ? 'cursor-pointer'
+                                : 'cursor-not-allowed'}"
+                            on:click={(e) => {
+                                if (
+                                    // @ts-ignore
+                                    !["INPUT", "SPAN"].includes(
+                                        e.target.nodeName
+                                    ) && plugins_copy[plugins.key]
+                                ) {
+                                    push(
+                                        `/app/${guild["id"]}/plugins/${plugin.slug}`
+                                    );
+                                }
+                            }}
                             in:fly={{ y: 600, duration: 1000 + i * 300 }}
-                            href="/app/{guild['id']}/plugins/{plugin.slug}"
                         >
-                            <div class="font-bold text-3xl mb-2 text-white">
-                                {plugin.name}
+                            <div
+                                class="font-bold text-3xl mb-2 text-white flex"
+                            >
+                                <div class="flex-grow">
+                                    {plugin.name}
+                                </div>
+                                <div class="ml-3">
+                                    <Switch
+                                        bind:checked={plugins[plugin.key]}
+                                    />
+                                </div>
                             </div>
+
                             <p class="text-gray-700 text-base text-grey-400">
                                 {plugin.description}
                             </p>
-                        </a>
+                        </div>
                     {/each}
-                {/await}
+                {/if}
             </div>
+            {#if update_modal}
+                <div
+                    class="flex mr-4 ml-4 bg-gradient-to-r from-orange to-purple fixed place-self-end h-16 w-full rounded-md p-4 mb-4"
+                    transition:fly={{ y: 100, duration: 500 }}
+                >
+                    <div class="text-white w-64 text-start text-xl">
+                        You have unsaved changes
+                    </div>
+                    <button
+                        class="bg-purple h-8 rounded-lg w-16 text-white ml-4 mr-4"
+                        on:click={() =>
+                            (plugins = JSON.parse(
+                                JSON.stringify(plugins_copy)
+                            ))}>Reset</button
+                    >
+                    <button
+                        class="bg-orange h-8 rounded-lg w-16 text-white"
+                        on:click={savePlugins}>Save</button
+                    >
+                </div>
+            {/if}
         </div>
     </div>
 {/if}

@@ -2,7 +2,8 @@ import axios from "axios";
 
 const axiosAPI = axios.create({
     // @ts-ignore
-    baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "/",
+  withCredentials: true, //ab
 });
 
 const apiRequest = (method, url, request) => {

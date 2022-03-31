@@ -15,7 +15,6 @@
   $: s = nav ? "flex" : "";
   location.subscribe((newLocation) => {
     nav = newLocation.substring(0, newLocation.length - 1).startsWith("/app/");
-
   });
 
   const routes = {
