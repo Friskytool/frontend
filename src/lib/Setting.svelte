@@ -15,7 +15,6 @@
                     target.classList[0].startsWith("s-")
                 )
             ) {
-                console.log(target);
                 cb();
             }
         };
@@ -56,9 +55,8 @@
 
     function update(value) {
         // if value is list map to every id element in list
-        console.log(value);
+
         if (Array.isArray(value)) {
-            console.log(value);
             value = value.map((v) => {
                 return { id: v.id };
             });
@@ -89,7 +87,7 @@
             <p class="text-gray-700 text-base text-grey-400">
                 {setting.description}
             </p>
-            <div class="mt-3">
+            <div class="mt-3 tag-styles">
                 {#if setting.type == "string"}
                     <textarea
                         type="text"
@@ -130,7 +128,7 @@
                         onlyUnique={true}
                         allowPaste={true}
                         allowDrop={true}
-                        on:tags={(e) => (value = value)}
+                        on:tags={(_) => (value = value)}
                     />
                 {:else if setting.type == "list"}
                     <div class="max-w-lg m-2">
@@ -146,6 +144,7 @@
                                         value = value; // force update
                                     }
                                 }}
+                                autocomplete="off"
                                 placeholder="Enter role"
                             />
 
@@ -185,3 +184,24 @@
         </div>
     {/if}
 </div>
+
+<style>
+    .tag-styles :global(.svelte-tags-input-tag) {
+        background: black;
+    }
+
+    .tag-styles :global(.svelte-tags-input-layout) {
+        background: #181a1b;
+    }
+
+    .tag-styles :global(.svelte-tags-input) {
+        background: #181a1b;
+        color: white;
+    }
+
+    .tag-styles :global(.svelte-tags-input-matchs) {
+        background: #181a1b;
+        color: white;
+        overflow-y: hidden;
+    }
+</style>

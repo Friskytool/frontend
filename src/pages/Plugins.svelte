@@ -1,13 +1,13 @@
 <script>
     import api from "../services/api.js";
     import Switch from "../lib/Switch.svelte";
+    import SaveState from "../lib/SaveState.svelte";
     import { push } from "svelte-spa-router";
     import { onMount } from "svelte";
     import { fly } from "svelte/transition";
     import { guilds } from "../services/stores.js";
 
     export let params = {};
-    console.log("A");
     let update_modal = false;
     let plugin_data;
     let plugins, plugins_copy;
@@ -26,7 +26,6 @@
         plugins_copy = JSON.parse(JSON.stringify(plugins));
     };
     let guild = $guilds.find((g) => g.id == params.id) || {};
-    $: console.log(guild);
     onMount(async () => {
         if (!guild["id"]) {
             if ($guilds.length == 0) {
@@ -46,7 +45,6 @@
             }
         }
         plugin_data = await api.get("/static/plugins.json");
-        console.log("data", plugin_data);
         let enabled_plugins = await api.get(`/api/guilds/${params.id}/plugins`);
         let eplugins = {};
         for (const plugin of plugin_data) {
@@ -88,7 +86,8 @@
                                     // @ts-ignore
                                     !["INPUT", "SPAN"].includes(
                                         e.target.nodeName
-                                    ) && plugins_copy[plugins.key]
+                                    ) &&
+                                    plugins_copy[plugin.key]
                                 ) {
                                     push(
                                         `/app/${guild["id"]}/plugins/${plugin.slug}`
@@ -117,27 +116,15 @@
                     {/each}
                 {/if}
             </div>
-            {#if update_modal}
-                <div
-                    class="flex mr-4 ml-4 bg-gradient-to-r from-orange to-purple fixed place-self-end h-16 w-full rounded-md p-4 mb-4"
-                    transition:fly={{ y: 100, duration: 500 }}
-                >
-                    <div class="text-white w-64 text-start text-xl">
-                        You have unsaved changes
-                    </div>
-                    <button
-                        class="bg-purple h-8 rounded-lg w-16 text-white ml-4 mr-4"
-                        on:click={() =>
-                            (plugins = JSON.parse(
-                                JSON.stringify(plugins_copy)
-                            ))}>Reset</button
-                    >
-                    <button
-                        class="bg-orange h-8 rounded-lg w-16 text-white"
-                        on:click={savePlugins}>Save</button
-                    >
-                </div>
-            {/if}
         </div>
     </div>
+    {#if update_modal}
+        <SaveState
+            save={savePlugins}
+            on:update={() => {
+                update_modal = update_modal;
+            }}
+            reset={() => (plugins = JSON.parse(JSON.stringify(plugins_copy)))}
+        />
+    {/if}
 {/if}

@@ -115,7 +115,7 @@
                             d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"
                         /></svg
                     >
-                    <span class="ml-3">Dashboard</span>
+                    <span class="ml-3">Servers</span>
                 </a>
             </li>
             <li>
@@ -203,7 +203,7 @@
             </li>
             <li>
                 <a
-                    href="/"
+                    href="/app/{guild_id}/giveaways"
                     use:link
                     class="flex items-center p-2 text-base font-normal text-grey rounded-lg dark:text-white hover:bg-grey-700 dark:hover:bg-grey-700"
                 >
@@ -218,17 +218,17 @@
                             d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"
                         /></svg
                     >
-                    <span class="flex-1 ml-3 whitespace-nowrap">Inbox</span>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Giveaways</span>
                     <span
                         class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-200"
-                        >3</span
+                        >0</span
                     >
                 </a>
             </li>
             <li>
                 <a
-                    href="/"
-                    use:link
+                    href="https://discord.gg/TMu242J"
+                    target="_blank"
                     class="flex items-center p-2 text-base font-normal text-grey rounded-lg dark:text-white hover:bg-grey-700 dark:hover:bg-grey-700"
                 >
                     <svg
@@ -242,27 +242,9 @@
                             clip-rule="evenodd"
                         /></svg
                     >
-                    <span class="flex-1 ml-3 whitespace-nowrap">Users</span>
-                </a>
-            </li>
-            <li>
-                <a
-                    href="/"
-                    use:link
-                    class="flex items-center p-2 text-base font-normal text-grey rounded-lg dark:text-white hover:bg-grey-700 dark:hover:bg-grey-700"
-                >
-                    <svg
-                        class="flex-shrink-0 w-6 h-6 text-grey transition duration-75 dark:text-grey group-hover:text-grey dark:group-hover:text-white"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                        ><path
-                            fill-rule="evenodd"
-                            d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
-                            clip-rule="evenodd"
-                        /></svg
+                    <span class="flex-1 ml-3 whitespace-nowrap"
+                        >Support Server</span
                     >
-                    <span class="flex-1 ml-3 whitespace-nowrap">Products</span>
                 </a>
             </li>
         </ul>

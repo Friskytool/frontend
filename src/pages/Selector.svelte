@@ -6,7 +6,6 @@
     import api from "../services/api.js";
 
     let guilds = $guilds_cache;
-    $: console.log(guilds);
     onMount(async () => {
         await api
             .get("/api/user/guilds")
@@ -18,7 +17,6 @@
             .catch((e) => {
                 window.location.href =
                     (import.meta.env.VITE_API_URL || "") + "/api/oauth/login";
-                // console.log(e);
                 // let w = window.open(
                 //     `${import.meta.env.VITE_API_URL}/api/oauth/login`,
                 //     "_blank",
@@ -35,8 +33,6 @@
     const etrim = function (str, length) {
         return str.length > length ? str.substring(0, length) + "..." : str;
     };
-
-    console.log("selector");
 </script>
 
 <h1

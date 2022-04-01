@@ -10,6 +10,7 @@
   import Stats from "./pages/Stats.svelte";
   import Plugin from "./pages/Plugin.svelte";
   import CustomBot from "./pages/CustomBot.svelte";
+  import Giveaways from "./pages/Giveaways.svelte";
   let s = "";
   let nav = $location.substring(0, $location.length - 1).startsWith("/app/");
   $: s = nav ? "flex" : "";
@@ -24,6 +25,7 @@
     "/app/:id": Plugins,
     "/app/:id/plugins/:plugin": Plugin,
     "/app/:id/custom-bot": CustomBot,
+    "/app/:id/giveaways": Giveaways,
     "/stats": Stats,
   };
 </script>
