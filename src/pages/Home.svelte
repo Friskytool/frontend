@@ -5,7 +5,6 @@
 	import { fade, draw, fly } from "svelte/transition";
 	import { expand } from "../services/transitions.js";
 	import { inner, outer } from "../assets/logo.js";
-
 	let visible = false;
 
 	onMount(async () => {

@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     import { fly } from "svelte/transition";
     import { createEventDispatcher } from "svelte";
     import Tags from "svelte-tags-input";
@@ -83,7 +85,7 @@
         {setting.name}
     </div>
     {#if open}
-        <div class="flex flex-col" in:fly={{ y: -100, duration: 500 }}>
+        <div class="flex flex-col" in:fly={{ y: -50, duration: 500 }}>
             <p class="text-gray-700 text-base text-grey-400">
                 {setting.description}
             </p>

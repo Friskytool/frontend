@@ -21,7 +21,8 @@ export default {
       },
       "orange": "#ff8b58",
       "purple": "#642ad6",
-      "green": "#34d69f",
+        "green": "#34d69f",
+      "red":"#ED4245"
     }
   },
   content: ["./index.html",'./src/**/*.{svelte,js,ts}'], // for unused CSS

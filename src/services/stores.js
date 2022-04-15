@@ -5,3 +5,4 @@ guilds.subscribe(guilds => {
     console.log(`Update: ${guilds.length} guilds`);
 });
 export let user = writable({});
+export let modal = writable(null);

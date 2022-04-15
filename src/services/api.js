@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { user } from "./stores";
 const axiosAPI = axios.create({
     // @ts-ignore
   baseURL: "/",
@@ -64,4 +64,8 @@ export const getSettings = async (guild_id) => {
   }
   console.log(data);
   return data;
+}
+
+export const getUser = async () => {
+  return await API.get("/api/user");
 }

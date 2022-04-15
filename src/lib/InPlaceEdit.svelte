@@ -3,7 +3,7 @@
 
     export let value,
         required = true;
-
+    export let className = "";
     const dispatch = createEventDispatcher();
     let editing = false,
         original;
@@ -39,10 +39,16 @@
 
 {#if editing}
     <form on:submit|preventDefault={submit} on:keydown={keydown}>
-        <input bind:value on:blur={submit} {required} use:focus />
+        <input
+            bind:value
+            on:blur={submit}
+            {required}
+            class={className}
+            use:focus
+        />
     </form>
 {:else}
-    <div on:click={edit}>
+    <div on:click={edit} class={className}>
         {value}
     </div>
 {/if}

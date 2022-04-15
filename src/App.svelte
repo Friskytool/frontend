@@ -10,7 +10,9 @@
   import Stats from "./pages/Stats.svelte";
   import Plugin from "./pages/Plugin.svelte";
   import CustomBot from "./pages/CustomBot.svelte";
-  import Giveaways from "./pages/Giveaways.svelte";
+  import Tags from "./pages/Tags.svelte";
+  import Modal from "svelte-simple-modal";
+  import { modal } from "./services/stores";
   let s = "";
   let nav = $location.substring(0, $location.length - 1).startsWith("/app/");
   $: s = nav ? "flex" : "";
@@ -25,16 +27,27 @@
     "/app/:id": Plugins,
     "/app/:id/plugins/:plugin": Plugin,
     "/app/:id/custom-bot": CustomBot,
-    "/app/:id/giveaways": Giveaways,
+    "/app/:id/tags": Tags,
     "/stats": Stats,
   };
 </script>
 
-<div class="dark {s} dark:text-white">
-  {#if !nav}
-    <Nav />
-  {:else}
-    <Side />
-  {/if}
-  <Router {routes} />
-</div>
+<Modal
+  show={$modal}
+  unstyled={false}
+  classBg="fixed top-0 left-0 w-screen h-screen flex flex-col justify-center bg-orange"
+  styleWindow={{
+    backgroundColor: "rgba(0,0,0)",
+    borderRadius: "1",
+    borderColor: "rbg(1,1,1)",
+  }}
+>
+  <div class="dark {s} dark:text-white">
+    {#if !nav}
+      <Nav />
+    {:else}
+      <Side />
+    {/if}
+    <Router {routes} />
+  </div>
+</Modal>

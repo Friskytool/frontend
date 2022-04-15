@@ -4,6 +4,7 @@
     import SaveState from "../lib/SaveState.svelte";
     import api, { getSettings } from "../services/api.js";
     import Setting from "../lib/Setting.svelte";
+    import { guilds } from "../services/stores.js";
 
     export let params;
     $: mount(params);
@@ -47,10 +48,31 @@
 
         settings = JSON.parse(JSON.stringify(new_settings));
     };
+
+    let guild = $guilds.find((g) => g.id == params.id) || {};
+    onMount(async () => {
+        if (!guild["id"]) {
+            if ($guilds.length == 0) {
+                await api
+                    .get("/api/user/guilds")
+                    .then((response) => {
+                        guilds.update((_) => response);
+                    })
+
+                    .catch((e) => {
+                        window.location.href =
+                            (import.meta.env.VITE_API_URL || "") +
+                            "/api/oauth/login";
+                    });
+
+                guild = await api.get(`/api/guilds/${params.id}`);
+            }
+        }
+    });
 </script>
 
 {#if settings && roles}
-    <div class="m-1 lg:ml-4 w-full h-screen flex">
+    <div class="m-1 ml-8 lg:ml-64 h-full flex">
         <div class="mt-8" />
 
         <div class="w-full mb-auto flex-grow">
@@ -63,9 +85,9 @@
                 {#each Object.entries(new_settings) as [key, setting], i (new_settings[key])}
                     <div in:fly={{ x: 200, duration: 300 + i * 100 }}>
                         <Setting
-                            {key}
-                            {setting}
-                            {roles}
+                            bind:key
+                            bind:setting
+                            bind:roles
                             on:update={(v) =>
                                 (new_settings[key].value = v.detail)}
                         />

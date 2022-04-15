@@ -57,7 +57,7 @@
 </script>
 
 {#if guild}
-    <div class="m-2 lg:ml-4 w-full">
+    <div class="m-2 lg:ml-64 ml-8 h-full flex w-full">
         <!-- <h1
             class="rounded-lg px-4 mx-auto py-2 dark:text-green text-7xl mt-3 text-left"
             in:fly={{ y: 0, duration: 500 }}

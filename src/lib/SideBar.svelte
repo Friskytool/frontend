@@ -12,6 +12,10 @@
     location.subscribe((l) => {
         guild_id = l.split("/")[2];
     });
+
+    let tagcount = api.get(`/api/guilds/${guild_id}/tags`).then((response) => {
+        return response.length;
+    });
     let menu = `hidden`;
     $: console.log("menu", menu);
     let plugin_data = api.get("/static/plugins.json");
@@ -23,7 +27,7 @@
     </div>
 </div> -->
 
-<div class="sm:hidden">
+<div class="lg:hidden fixed">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="relative flex items-center justify-between h-16">
             <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -92,7 +96,7 @@
     </div>
 </div>
 <aside
-    class="h-screen {menu} lg:inline-block"
+    class="h-screen {menu} lg:inline-block fixed mt-12 lg:mt-1 z-30"
     aria-label="Sidebar"
     in:fly={{ x: -10, duration: 450 }}
 >
@@ -203,7 +207,7 @@
             </li>
             <li>
                 <a
-                    href="/app/{guild_id}/giveaways"
+                    href="/app/{guild_id}/tags"
                     use:link
                     class="flex items-center p-2 text-base font-normal text-grey rounded-lg dark:text-white hover:bg-grey-700 dark:hover:bg-grey-700"
                 >
@@ -218,33 +222,19 @@
                             d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"
                         /></svg
                     >
-                    <span class="flex-1 ml-3 whitespace-nowrap">Giveaways</span>
+                    <span class="flex-1 ml-3 whitespace-nowrap">Tags</span>
+
                     <span
                         class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-200"
-                        >0</span
                     >
-                </a>
-            </li>
-            <li>
-                <a
-                    href="https://discord.gg/TMu242J"
-                    target="_blank"
-                    class="flex items-center p-2 text-base font-normal text-grey rounded-lg dark:text-white hover:bg-grey-700 dark:hover:bg-grey-700"
-                >
-                    <svg
-                        class="flex-shrink-0 w-6 h-6 text-grey transition duration-75 dark:text-grey group-hover:text-grey dark:group-hover:text-white"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                        ><path
-                            fill-rule="evenodd"
-                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                            clip-rule="evenodd"
-                        /></svg
-                    >
-                    <span class="flex-1 ml-3 whitespace-nowrap"
-                        >Support Server</span
-                    >
+                        {#await tagcount}
+                            0
+                        {:then number}
+                            {number}
+                        {:catch _}
+                            ?
+                        {/await}
+                    </span>
                 </a>
             </li>
         </ul>
